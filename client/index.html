@@ -73,16 +73,18 @@
             methods: {
                 onSubmit: function(evt) {
                     let self = this;
-                    console.log('Message:', this.msg);
-                   
-                    axios.post('http://app.datalus.io:5000', {
-                        message: this.msg
+                    // console.log(evt)
+                    const data = new FormData();
+                   data.append('msg', self.msg);
+
+                    axios.post('http://app.datalus.io:5000', data, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
                     })
                     .then(function (response) {
-                        console.log(response.result);
-                        if(response.result == 0){
+                        let data = response.data;
+                        if(data.result == 0){
                             self.$emit('onSubmitForm', 'Hello Human!')
-                        } else if (response.result == 1){
+                        } else if (data.result == 1){
                             self.$emit('onSubmitForm', 'Hello Replicant!')  
                         }
                     })
